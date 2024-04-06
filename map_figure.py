@@ -5,7 +5,7 @@ import geopandas as gpd
 import plotly.graph_objects as go
 from shapely.geometry import Point
 
-nn = pd.read_parquet("geo/data/region52_light.parquet")
+nn = pd.read_parquet("geo/data/region52_medium.parquet")
 
 def convert_crs(x_arr, y_arr, to_crs='EPSG:32646', from_crs="EPSG:4326"):
     """Преобразование значений координат в массивах x_arr и y_arr

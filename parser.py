@@ -7,7 +7,7 @@ import chromedriver_py
 from selenium import webdriver
 import os
 os.environ['MOZ_HEADLESS'] = '0'
-
+#commit
 class Parser:
     driver=None
     def __init__(self):

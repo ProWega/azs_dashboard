@@ -40,6 +40,8 @@ def GetPriceDynamicAll():
     )
 def GetLineChartByOilType(type_oil):
     df = data_worker.GetMainDf()
+    dict_replace = {'АИ-98': 'АИ-98/100', 'АИ-100': 'АИ-98/100', "КПГ": "Метан", "СУГ": "Пропан"}
+    df.replace({"Тип топлива": dict_replace}, inplace=True)
     df = df[df['Тип топлива'] == type_oil]
     df_mean = df.groupby(['Дата', "Тип компании"])['Цена'].mean()
     df_mean_all = df.groupby(['Дата'])['Цена'].mean()
@@ -60,8 +62,8 @@ def GetLineChartByOilType(type_oil):
 def GetMapTodaySituation():
     geo = data_utils.GeoRegion('geo/data/region52.parquet')
     map = map_figure.mapFigure()
-    print(data_worker.main_df.columns)
-    print(data_worker.main_df.groupby(['Район', 'Тип топлива'])['Цена'].mean())
+    #print(data_worker.main_df.columns)
+    #print(data_worker.main_df.groupby(['Район', 'Тип топлива'])['Цена'].mean())
     #for i, r in geo.nn.iterrows():
     #    map.update_traces(selector=dict(name))
     return dcc.Graph(figure=map, id='map-today-situation', config={'scrollZoom':True})
@@ -69,7 +71,10 @@ def GetMapTodaySituation():
 def GetMapTodaySituationByTypeOilName(type_oil_name):
     map = map_figure.mapFigure()
     df = data_worker.GetMainDf()
+    dict_replace = {'АИ-98': 'АИ-98/100', 'АИ-100': 'АИ-98/100', "КПГ": "Метан", "СУГ": "Пропан"}
+    df.replace({"Тип топлива": dict_replace}, inplace=True)
     df = df[df['Тип топлива']==type_oil_name]
+
     if len(df) > 0:
         df = df.groupby(['Район'])['Цена'].mean()
         max_price = df.values.max()
@@ -83,7 +88,7 @@ def GetMapTodaySituationByTypeOilName(type_oil_name):
             #print(r)
             #print(df[r])
             map.update_traces(selector=dict(name=r),
-                              text = f'{r} - средн: {df[r]}',
+                              text = f'{r} - средн: {round(df[r], 2)}',
                               fillcolor=f'rgb({int(0+((float(df[r]) - min_price)/delta)*255)}, {int(255-((float(df[r]) - min_price)/delta)*255)}, 36)')
         return dcc.Graph(figure=map, id='map-today-situation',
                          #config={'scrollZoom': True}

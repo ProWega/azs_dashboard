@@ -11,11 +11,12 @@ dash.register_page(__name__)
 
 data_worker = data_utils.DataWorker()
 print(f"TEST DATE {data_utils.DateFromDate64(data_worker.max_date)}")
+oil_types = ['АИ-92', 'АИ-95', 'ДТ', 'Пропан', 'АИ-98/100', 'Метан']
 tabs_oil_history = [dbc.Tab(children=charts_utils.GetLineChartByOilType(oil_type), label=oil_type)
-                    for oil_type in data_utils.oil_types_names
+                    for oil_type in oil_types
                     ]
 tabs_today_map_situation = [dbc.Tab(children=charts_utils.GetMapTodaySituationByTypeOilName(oil_type), label=oil_type)
-                            for oil_type in data_utils.oil_types_names
+                            for oil_type in oil_types
                             ]
 
 wink_content = dbc.Card(
